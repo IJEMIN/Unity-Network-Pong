@@ -29,8 +29,8 @@ public class Player : MonoBehaviourPun
         {
             return;
         }
-        
-        var input = Input.GetAxis("Vertical");
+
+        var input = InputButton.VerticalInput;
         
         var distance = input * speed * Time.deltaTime;
         var targetPosition = transform.position + Vector3.up * distance;

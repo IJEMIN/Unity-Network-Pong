@@ -8,10 +8,10 @@ public class Ball : MonoBehaviourPun
     private Vector2 direction = Vector2.right;
     private readonly float speed = 10f;
     private readonly float randomRefectionIntensity = 0.1f;
-
+    
     private void FixedUpdate()
     {
-        if (!IsMasterClientLocal) return;
+        if (!IsMasterClientLocal || PhotonNetwork.PlayerList.Length < 2) return;
 
         var distance = speed * Time.deltaTime;
         var hit = Physics2D.Raycast(transform.position, direction, distance);

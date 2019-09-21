@@ -23,12 +23,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject ballPrefab;
 
     private int[] playerScores;
-    private Ball ball;
 
     private void Start()
     {
         playerScores = new[] {0, 0};
-        UpdateScoreText();
         SpawnPlayer();
 
         if (PhotonNetwork.IsMasterClient) SpawnBall();
@@ -44,7 +42,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void SpawnBall()
     {
-        ball = PhotonNetwork.Instantiate(ballPrefab.name, Vector2.zero, Quaternion.identity).GetComponent<Ball>();
+        PhotonNetwork.Instantiate(ballPrefab.name, Vector2.zero, Quaternion.identity).GetComponent<Ball>();
     }
 
     public override void OnLeftRoom()
@@ -55,18 +53,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void AddScore(int playerNumber, int score)
     {
         playerScores[playerNumber - 1] += score;
-        UpdateScoreText();
-
-        ResetBallPosition();
+        
+        photonView.RPC("RPCUpdateScoreText", RpcTarget.All, playerScores[0].ToString(), playerScores[1].ToString());
     }
 
-    private void UpdateScoreText()
+    
+    [PunRPC]
+    private void RPCUpdateScoreText(string player1ScoreText, string player2ScoreText)
     {
-        scoreText.text = $"{playerScores[0]} : {playerScores[1]}";
-    }
-
-    private void ResetBallPosition()
-    {
-        ball.transform.position = Vector2.zero;
+        scoreText.text = $"{player1ScoreText} : {player2ScoreText}";
     }
 }

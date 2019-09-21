@@ -20,6 +20,12 @@ public class Ball : MonoBehaviourPun
         {
             direction = Vector2.Reflect(direction, hit.normal);
             direction += Random.insideUnitCircle * randomRefectionIntensity;
+
+            var goalpost = hit.collider.GetComponent<Goalpost>();
+            if (goalpost != null)
+            {
+                GameManager.Instance.AddScore(goalpost.playerNumber, 1);
+            }
         }
 
         transform.position = (Vector2) transform.position + direction * distance;

@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private int[] playerScores;
     private Ball ball;
-    
+
     private void Start()
     {
         playerScores = new[] {0, 0};
@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         playerScores[playerNumber - 1] += score;
         UpdateScoreText();
+
+        ResetBallPosition();
     }
 
     private void UpdateScoreText()

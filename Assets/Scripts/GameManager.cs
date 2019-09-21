@@ -1,15 +1,33 @@
 ﻿using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    public static GameManager Instance
+    {
+        get
+        {
+            if (instance == null) instance = FindObjectOfType<GameManager>();
+
+            return instance;
+        }
+    }
+
+    private static GameManager instance;
+
+    public Text scoreText;
     public Transform[] spawnPositions;
     public GameObject playerPrefab;
     public GameObject ballPrefab;
 
+    private int[] playerScores;
+    
     private void Start()
     {
+        playerScores = new[] {0, 0};
+        UpdateScoreText();
         SpawnPlayer();
 
         if (PhotonNetwork.IsMasterClient) SpawnBall();
@@ -31,5 +49,16 @@ public class GameManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene("Lobby");
+    }
+
+    public void AddScore(int playerNumber, int score)
+    {
+        playerScores[playerNumber - 1] += score;
+        UpdateScoreText();
+    }
+
+    public void UpdateScoreText()
+    {
+        scoreText.text = $"{playerScores[0]} : {playerScores[1]}";
     }
 }

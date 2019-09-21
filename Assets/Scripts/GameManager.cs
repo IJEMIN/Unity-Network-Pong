@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject ballPrefab;
 
     private int[] playerScores;
+    private Ball ball;
     
     private void Start()
     {
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void SpawnBall()
     {
-        PhotonNetwork.Instantiate(ballPrefab.name, Vector2.zero, Quaternion.identity);
+        ball = PhotonNetwork.Instantiate(ballPrefab.name, Vector2.zero, Quaternion.identity).GetComponent<Ball>();
     }
 
     public override void OnLeftRoom()
@@ -57,8 +58,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         UpdateScoreText();
     }
 
-    public void UpdateScoreText()
+    private void UpdateScoreText()
     {
         scoreText.text = $"{playerScores[0]} : {playerScores[1]}";
+    }
+
+    private void ResetBallPosition()
+    {
+        ball.transform.position = Vector2.zero;
     }
 }
